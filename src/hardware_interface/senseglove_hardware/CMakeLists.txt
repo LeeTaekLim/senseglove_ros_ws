@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(senseglove_hardware)
-
-add_compile_options(-std=c++14 -Wall -Wextra -Werror)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    message(STATUS "GCC detected, adding compile flags")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98 -pedantic -Wall -Wextra")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+add_compile_options(-std=c++14) # -Wall -Wextra -Werror)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
@@ -12,13 +15,13 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 
 find_library(SGCORE
-        NAMES libSGCoreCpp.so
-        PATHS ../../SenseGlove_API/Core/SGCoreCpp/lib/linux/Release
+        NAMES SGCoreCpp.dll SGCoreCpp.lib SGCoreCpp.exp
+        PATHS ../../SenseGlove_API/Core/SGCoreCpp/lib/win/Release
         REQUIRED)
 
 find_library(SGCONNECT
-        NAMES libSGConnect.so
-        PATHS ../../SenseGlove_API/Core/SGConnect/lib/linux
+        NAMES SGConnect.dll SGConnect.lib SGConnect.exp 
+        PATHS ../../SenseGlove_API/Core/SGConnect/lib/win/Release
         REQUIRED)
 
 catkin_package(
@@ -60,7 +63,7 @@ add_library(${PROJECT_NAME}
         src/senseglove_setup.cpp
         )
 
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${SGCONNECT} ${SGCORE} pthread)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${SGCONNECT} ${SGCORE})# pthread)
 
 install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}

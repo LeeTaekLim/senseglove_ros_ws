@@ -157,7 +157,7 @@ bool SenseGloveRobot::updateGloveData(const ros::Duration period)
       joint.position_ = sensor_data_.sensorAngles[joint.joint_index_ / 4][joint.joint_index_ % 4];
       double intermediate_vel =
           (sensor_data_.sensorAngles[joint.joint_index_ / 4][joint.joint_index_ % 4] - joint.velocity_);
-      if (intermediate_vel != 0.0 and period.toSec() != 0.0)
+      if (intermediate_vel != 0.0 && period.toSec() != 0.0)
       {
         joint.velocity_ = intermediate_vel / 1;
       }
@@ -184,7 +184,7 @@ bool SenseGloveRobot::updateGloveData(const ros::Duration period)
   {
     hand_update = true;
   }
-  updated_ |= (glove_update and hand_update);
+  updated_ |= (glove_update && hand_update);
   return updated_;
 }
 

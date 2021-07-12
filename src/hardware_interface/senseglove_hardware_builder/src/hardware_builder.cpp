@@ -116,7 +116,7 @@ senseglove::SenseGloveRobot HardwareBuilder::createRobot(const YAML::Node& robot
   HardwareBuilder::validateRequiredKeysExist(robot_config, HardwareBuilder::ROBOT_REQUIRED_KEYS, "glove");
   bool is_glove_right = glove.IsRight();
 
-  if (is_glove_right xor is_arg_right)
+  if (is_glove_right != is_arg_right)
   {
     ROS_ERROR("robot_index/ glove_nr and right-handedness do not match!\n %d, %d"
               "\nPlease launch with correct nr_of_glove argument (1 for left, 2 for right).",
@@ -225,12 +225,12 @@ SGCore::SG::SenseGlove HardwareBuilder::correct_glove(std::vector<SGCore::SG::Se
 {
   int mod = nr_of_glove_ % 2;
   auto choice_a = gloves[nr_of_glove_];
-  bool not_equal = choice_a.IsRight() xor is_right_;
-  if (mod == 0 and not_equal)
+  bool not_equal = choice_a.IsRight() != is_right_;
+  if (mod == 0 && not_equal)
   {
     return gloves[nr_of_glove_ + 1];
   }
-  else if (mod == 1 and not_equal)
+  else if (mod == 1 && not_equal)
   {
     return gloves[nr_of_glove_ - 1];
   }

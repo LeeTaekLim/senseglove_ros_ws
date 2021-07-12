@@ -1,6 +1,8 @@
 // Copyright 2020 Senseglove
 #ifndef ROS_WORKSPACE_HARDWARE_BUILDER_H
 #define ROS_WORKSPACE_HARDWARE_BUILDER_H
+
+
 #include "senseglove_hardware_builder/allowed_robot.h"
 
 #include <memory>

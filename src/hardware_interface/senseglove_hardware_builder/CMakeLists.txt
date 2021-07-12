@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(senseglove_hardware_builder)
-
-add_compile_options(-std=c++14 -Wall -Wextra -Werror)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    message(STATUS "GCC detected, adding compile flags")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98 -pedantic -Wall -Wextra")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+add_compile_options(-std=c++14) # -Wall -Wextra -Werror)
 
 find_package(catkin REQUIRED COMPONENTS
         roscpp
@@ -13,14 +16,14 @@ find_package(catkin REQUIRED COMPONENTS
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 find_library(SGCORE
-    NAMES libSGCoreCpp.so
-    PATHS ../../SenseGlove_API/Core/SGCoreCpp/lib/linux/Release
-    REQUIRED)
+        NAMES SGCoreCpp.dll SGCoreCpp.lib SGCoreCpp.exp
+        PATHS ../../SenseGlove_API/Core/SGCoreCpp/lib/win/Release
+        REQUIRED)
 
 find_library(SGCONNECT
-    NAMES libSGConnect.so
-    PATHS ../../SenseGlove_API/Core/SGConnect/lib/linux
-    REQUIRED)
+        NAMES SGConnect.dll SGConnect.lib SGConnect.exp 
+        PATHS ../../SenseGlove_API/Core/SGConnect/lib/win/Release
+        REQUIRED)
 
 catkin_package(
         INCLUDE_DIRS include
@@ -39,10 +42,12 @@ catkin_package(
 #endif()
 
 include_directories(include
+        include
         SYSTEM
         ${catkin_INCLUDE_DIRS}
         ../../SenseGlove_API/Core/SGConnect/incl
-        ../../SenseGlove_API/Core/SGCoreCpp/incl)
+        ../../SenseGlove_API/Core/SGCoreCpp/incl
+        C:/Users/Dyros/Desktop/yaml/yaml-cpp/include)
 
 add_library(${PROJECT_NAME}
         src/hardware_builder.cpp
@@ -52,7 +57,8 @@ target_link_libraries(${PROJECT_NAME}
         ${catkin_LIBRARIES}
         ${SGCORE}
         ${SGCONNECT}
-        yaml-cpp
+        C:/Users/Dyros/Desktop/avatar/src/senseglove_ros_ws/devel/lib/yaml-cpp.lib
+        # yaml-cpp
         )
 
 install(DIRECTORY include/${PROJECT_NAME}/
