@@ -113,7 +113,16 @@ void SenseGloveHardwareInterface::read(const ros::Time& /* time */, const ros::D
       {
         senseglove::Joint& joint = senseglove_setup_->getSenseGloveRobot(i).getJoint(k);
 
-        joint_position_[i][k] = joint.getPosition();
+        
+        if(k%4 == 3) {
+            joint_position_[i][k] = -joint.getPosition();       // finger_brake
+            std::cout << joint.getName() << std::endl;
+        }
+        // else if(k == 0) { //thumb cmc
+        //     joint_position_[i][k] = -joint.getPosition();
+        //     std::cout << joint.getName() << std::endl;
+        // }
+        else joint_position_[i][k] = joint.getPosition();
         joint_velocity_[i][k] = joint.getVelocity();
         joint_effort_[i][k] = joint.getTorque();
       }
