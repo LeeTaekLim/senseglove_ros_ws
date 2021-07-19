@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="senseglove_launch" type="startGlove.sh" name="startGlove" args="$(find senseglove_hardware)" output="screen" respawn="false" />
+
+</launch>

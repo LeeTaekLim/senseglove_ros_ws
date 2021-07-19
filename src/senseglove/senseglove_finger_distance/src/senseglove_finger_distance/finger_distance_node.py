@@ -1,6 +1,9 @@
 import rospy
 from senseglove_shared_resources.msg import SenseGloveState, FingerDistanceFloats
-from finger_distance_calibration import Calibration
+# import sys
+# sys.path.append('~/catkin_ws/src/senseglove_ros_ws/src/senseglove/senseglove_finger_distance/src/senseglove_finger_distance')
+from . import finger_distance_calibration
+# from finger_distance_calibration import Calibration
 from math import sqrt, pow
 
 
@@ -11,12 +14,14 @@ class FingerTipHandler:
         self.finger_nrs = finger_nrs
         self.calib_mode = calib_mode
         self.finger_tips = [FingerTipVector() for i in self.finger_nrs]
-        self.senseglove_ns = "/senseglove/" + str(int(glove_nr) / 2) + str(self.handedness_list[int(glove_nr) % 2])
+        self.senseglove_ns = "/senseglove/" + str('0') + str(self.handedness_list[int(glove_nr) % 2])
         rospy.Subscriber(self.senseglove_ns + "/senseglove_states", SenseGloveState,
                          callback=self.callback, queue_size=1)  # queue size is necessary otherwise it is infinite
         self.pub = rospy.Publisher(self.senseglove_ns + "/finger_distances", FingerDistanceFloats, queue_size=1)
 
-        self.calibration = Calibration("default")
+        self.calibration = finger_distance_calibration.Calibration(name="default")
+        self.calibration.run_interactive_calibration()
+
 
     def apply_calib(self, pinch_value=0.0, pinch_combination=0, mode='nothing'):
         if mode == 'nothing':
@@ -45,7 +50,7 @@ class FingerTipHandler:
             # If calibration on param server, load it
             if rospy.has_param('~pinch_calibration_min') and rospy.has_param('~pinch_calibration_max'):
                 rospy.loginfo("Found calibration data on server")
-                self.calibration = Calibration("from_param_server")
+                self.calibration = finger_distance_calibration.Calibration(name="from_param_server")
                 self.calibration.pinch_calibration_min = rospy.get_param('~pinch_calibration_min')
                 self.calibration.pinch_calibration_max = rospy.get_param('~pinch_calibration_max')
             else:
@@ -81,6 +86,8 @@ def main(glove_nr, calib_mode):
     rospy.init_node('senseglove_finger_distance_node')
     rospy.loginfo("initialize finger distance node")
     FingerTipHandler(glove_nr=glove_nr, calib_mode=calib_mode)
+
+
 
     while not rospy.is_shutdown():
         rospy.sleep(0.5)
