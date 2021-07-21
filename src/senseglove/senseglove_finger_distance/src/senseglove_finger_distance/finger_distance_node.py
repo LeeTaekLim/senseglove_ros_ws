@@ -1,7 +1,6 @@
 import rospy
 from senseglove_shared_resources.msg import SenseGloveState, FingerDistanceFloats
-# import sys
-# sys.path.append('~/catkin_ws/src/senseglove_ros_ws/src/senseglove/senseglove_finger_distance/src/senseglove_finger_distance')
+
 from . import finger_distance_calibration
 # from finger_distance_calibration import Calibration
 from math import sqrt, pow
@@ -20,7 +19,7 @@ class FingerTipHandler:
         self.pub = rospy.Publisher(self.senseglove_ns + "/finger_distances", FingerDistanceFloats, queue_size=1)
 
         self.calibration = finger_distance_calibration.Calibration(name="default")
-        self.calibration.run_interactive_calibration()
+        self.calibration.run_interactive_calibration(glove_nr)
 
 
     def apply_calib(self, pinch_value=0.0, pinch_combination=0, mode='nothing'):
@@ -86,6 +85,7 @@ def main(glove_nr, calib_mode):
     rospy.init_node('senseglove_finger_distance_node')
     rospy.loginfo("initialize finger distance node")
     FingerTipHandler(glove_nr=glove_nr, calib_mode=calib_mode)
+    
 
 
 

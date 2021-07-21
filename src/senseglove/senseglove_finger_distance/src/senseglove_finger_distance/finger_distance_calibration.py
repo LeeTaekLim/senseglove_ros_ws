@@ -101,11 +101,12 @@ class Calibration:
     def is_calibrated(self):
         return self.finished_open_flat and self.finished_thumb_index_pinch and self.finished_thumb_middle_pinch and self.finished_thumb_ring_pinch
 
-    def run_interactive_calibration(self):
+    def run_interactive_calibration(self,glove_nr):
         """
         Run an interactive (CLI) session for calibration.
         """
-        topic_name = str(self.handedness_list[int(self.glove_nr) % 2]) + '/senseglove/finger_distances'
+        topic_name = str(self.handedness_list[int(glove_nr) % 2]) + '/senseglove/finger_distances'         #/lh/senseglove/finger_dis
+        print("topic name :",topic_name)
         rospy.Subscriber(topic_name, FingerDistanceFloats, callback=self.senseglove_callback, queue_size=1)
 
         rospy.loginfo("Calibration of senseglove started, please flatten your hand.")
@@ -207,6 +208,7 @@ class Calibration:
 
     def senseglove_callback(self, finger_distance_msg):
         self.databuffer.appendleft(finger_distance_msg)
+        # print("call back")
 
     def get_avg_finger_distances(self):
 
@@ -215,6 +217,7 @@ class Calibration:
         thumb_indexdata = [x.th_ff.data for x in self.databuffer]
         if len(thumb_indexdata) == 0:
             rospy.logwarn("No data received! Is your glove still connected?")
+            print()
         else:
             avg_positions_msg.th_ff.data = sum(thumb_indexdata) / len(thumb_indexdata)
 

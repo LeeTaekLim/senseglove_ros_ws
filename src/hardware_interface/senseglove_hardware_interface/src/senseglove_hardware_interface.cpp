@@ -7,6 +7,9 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <ros/console.h>
+
+
 
 #include <urdf/model.h>
 
@@ -130,6 +133,7 @@ void SenseGloveHardwareInterface::read(const ros::Time& /* time */, const ros::D
 
 void SenseGloveHardwareInterface::write(const ros::Time& /* time */, const ros::Duration& /*&elapsed_time*/)
 {
+
   for (size_t i = 0; i < num_gloves_; ++i)
   {
     // Splice joint_effort_command vector into vectors for ffb and buzz commands
@@ -145,7 +149,7 @@ void SenseGloveHardwareInterface::write(const ros::Time& /* time */, const ros::
         {
           if (j % 2 == 1)
           {
-            joint_last_position_command_[i][h] = joint_position_command_[i][k];
+            joint_last_position_command_[i][h] = joint_position_command_[i][k];   // 숫자 바꾸면 ffb 가능//
             h++;
           }
           else
@@ -248,6 +252,7 @@ void SenseGloveHardwareInterface::updateSenseGloveState()
       senseglove_state_pub_->msg_.hand_position[k].x = robot.getHandPos(k).x;
       senseglove_state_pub_->msg_.hand_position[k].y = robot.getHandPos(k).y;
       senseglove_state_pub_->msg_.hand_position[k].z = robot.getHandPos(k).z;
+    //   std::cout << robot.hand_pose_.jointRotations << std::endl;
     }
     for (int j = 0; j < 5; ++j)
     {

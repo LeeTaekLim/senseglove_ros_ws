@@ -84,7 +84,6 @@ int main(int argc, char** argv)
   }
 
   ros::Rate rate(publish_rate); // ROS Rate at 5Hz
-
   while (ros::ok())
   {
     try
