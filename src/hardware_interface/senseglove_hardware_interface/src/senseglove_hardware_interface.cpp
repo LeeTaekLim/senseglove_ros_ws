@@ -8,7 +8,7 @@
 #include <sstream>
 #include <string>
 #include <ros/console.h>
-
+#include <string>
 
 
 #include <urdf/model.h>
@@ -229,6 +229,7 @@ void SenseGloveHardwareInterface::reserveMemory()
   senseglove_state_pub_->msg_.absolute_velocity.resize(num_gloves_ * num_joints_);
   senseglove_state_pub_->msg_.hand_position.resize(num_gloves_ * num_joints_);
   senseglove_state_pub_->msg_.finger_tip_positions.resize(5);
+  senseglove_state_pub_->msg_.hand_angle.resize(num_gloves_ * num_joints_);
 }
 
 void SenseGloveHardwareInterface::updateSenseGloveState()
@@ -252,7 +253,15 @@ void SenseGloveHardwareInterface::updateSenseGloveState()
       senseglove_state_pub_->msg_.hand_position[k].x = robot.getHandPos(k).x;
       senseglove_state_pub_->msg_.hand_position[k].y = robot.getHandPos(k).y;
       senseglove_state_pub_->msg_.hand_position[k].z = robot.getHandPos(k).z;
-    //   std::cout << robot.hand_pose_.jointRotations << std::endl;
+
+
+      senseglove_state_pub_->msg_.hand_angle[k].z = 1.11111;//robot.getHandAngle(k).z;
+      senseglove_state_pub_->msg_.hand_angle[k].y = 1.11111; //robot.getHandAngle(k).y;
+      senseglove_state_pub_->msg_.hand_angle[k].x =  1.111111; // robot.getHandAngle(k).x;
+    //   std::cout << "hand joint rot : " << robot.hand_pose_.jointRotations << std::endl;
+      std::cout << "hand joint rot : " << robot.getHandAngle(k).x << std::endl;
+      ROS_DEBUG_STREAM(std::to_string(robot.getHandAngle(k).x));
+
     }
     for (int j = 0; j < 5; ++j)
     {

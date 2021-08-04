@@ -62,6 +62,7 @@ public:
 
   SGCore::Kinematics::Vect3D getHandPos(int i);
   SGCore::Kinematics::Vect3D getFingerTip(int i);
+  SGCore::Kinematics::Vect3D getHandAngle(int i);
 
   // ros control works exclusively with doubles, but the sendHaptics function works with integers
   void actuateEffort(std::vector<double> effort_command);

@@ -58,7 +58,7 @@ int main()
 				std::cout << "The distance between thumb and index finger is " << std::to_string(dThumbIndex) << "mm." << std::endl;
 
 				//HandPose Example
-
+    
 				SGCore::HandPose handPose;
 				if (testGlove.GetHandPose(handModel, handProfile, handPose))
 				{

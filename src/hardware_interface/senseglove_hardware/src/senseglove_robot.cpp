@@ -70,6 +70,14 @@ SGCore::Kinematics::Vect3D SenseGloveRobot::getHandPos(int i)
   return hand_pose_.jointPositions[std::floor(i / 4)][i % 4];
 }
 
+SGCore::Kinematics::Vect3D SenseGloveRobot::getHandAngle(int i)
+{
+  // Make sure to convert between the coordinate frame of the Senseglove and the one used in ROS
+  // SG uses vector of vectors and ROS uses one long array
+  return hand_pose_.handAngles[std::floor(i / 4)][i % 4];
+}
+
+
 SGCore::Kinematics::Vect3D SenseGloveRobot::getFingerTip(int i)
 {
   // Make sure to convert between the coordinate frame of the Senseglove and the one used in ROS
